@@ -1,0 +1,61 @@
+Java 17 compilation: PASS (all warnings treated as errors)
+PASS POLY-1 STUDENT limit=14 rate=5.0 boundary/outcomes/fine
+PASS POLY-2 FACULTY limit=30 rate=2.0 boundary/outcomes/fine
+PASS POLY-3 GUEST limit=7 rate=10.0 boundary/outcomes/fine
+Polymorphism regression: 3 passed, 0 failed
+PASS T01 registration and book addition
+PASS T02 duplicate member and ISBN rejection
+PASS T03 successful issuance and due date
+PASS T04 unavailable book rejection
+PASS T05 membership duration violation
+PASS T06 successful and duplicate return with final fine
+PASS T07 empty and wholly unavailable queues
+PASS T08 missing searches and operation entities
+PASS T09 overdue due-date and ID sorting ties
+PASS T10 aggregate counts groups and fine totals
+PASS T11 per-book FIFO and independent book progress
+PASS T12 failed issue leaves every collection unchanged
+PASS T13 immutable collection and domain snapshots
+PASS T14 title searches and status membership filters
+PASS T15 reservation cancellation preserves remaining order
+PASS T16 duplicate and invalid reservations
+PASS T17 classification denial precedence and no mutation
+PASS T18 duplicate generated ID leaves queue and books intact
+PASS T19 return with backward clock is atomic
+PASS T20 invalid inputs and imported checkout rejection
+PASS T21 no invented simultaneous loan count limit
+PASS T22 supplier failure is propagated without state change
+PASS T23 cancelled reservation IDs cannot be reused
+PASS T24 empty reports include zero membership groups
+PASS T25 stale return cannot release a reissued book
+PASS T26 available reserved book retains FIFO after cancellation
+TSA3 service tests: 26 passed, 0 failed
+BOOKBRIDGE TSA3 — fixed demonstration date: 2026-11-11
+Boundary preview: APPROVED
+Issued L-001; due 2026-11-25
+Unavailable preview: RESERVED
+Reservation R-002 recorded for F100: ISBN-A
+Unavailable queue result: Optional.empty
+Expected denial: Requested 8 days; GUEST allows at most 7.
+Reservation fulfilled: F100, L-003
+Title search: [LibraryBook[isbn=ISBN-A, title=Java Collections, status=CHECKED_OUT]]
+Sorted loans: [LoanRecord[loanId=L-001, member=STUDENT S100 (Test Student), isbn=ISBN-A, issueDate=2026-11-11, dueDate=2026-11-25, returnDate=2026-11-11], LoanRecord[loanId=L-003, member=FACULTY F100 (Test Faculty), isbn=ISBN-A, issueDate=2026-11-11, dueDate=2026-12-11, returnDate=null]]
+Summary: available=1, checked out=1, active=1, history=2, pending=0, fines=PHP 0.00
+Active STUDENT loans: 0
+Active FACULTY loans: 1
+Active GUEST loans: 0
+=== POLYMORPHISM TEST 1 ===
+Student Maximum Loan Days: 14
+Faculty Maximum Loan Days: 30
+Guest Maximum Loan Days: 7
+
+=== POLYMORPHISM TEST 2 ===
+Student Daily Fine: PHP 5.00
+Faculty Daily Fine: PHP 2.00
+Guest Daily Fine: PHP 10.00
+PASS LEGACY-1 StudentMember
+PASS LEGACY-2 FacultyMember
+PASS LEGACY-3 GuestMember
+PASS LEGACY-4 original over-limit/unavailable precedence captured
+TSA2 assertion regression: 4 passed, 0 failed
+Verification completed; compiled classes: /Users/rafael/Documents/OOP-LabActivities/TSA3-Technical/BookBridge_TSA3/build/run.zHAjEA

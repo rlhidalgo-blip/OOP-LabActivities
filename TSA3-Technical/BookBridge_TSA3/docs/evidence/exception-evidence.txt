@@ -1,0 +1,87 @@
+E01 / T02 duplicate member
+  Actual: DuplicateEntityException: Member ID already registered: S
+  Expected type matched; all six collection snapshots unchanged: true
+E02 / T02 duplicate ISBN
+  Actual: DuplicateEntityException: ISBN already registered: A
+  Expected type matched; all six collection snapshots unchanged: true
+E03 / T05 duration limit
+  Actual: LoanLimitExceededException: Requested 15 days; STUDENT allows at most 14.
+  Expected type matched; all six collection snapshots unchanged: true
+E04 / T04 unavailable book
+  Actual: ItemUnavailableException: Book is already checked out: A
+  Expected type matched; all six collection snapshots unchanged: true
+E05 / T16 duplicate reservation
+  Actual: DuplicateEntityException: Member already has a pending reservation for ISBN A
+  Expected type matched; all six collection snapshots unchanged: true
+E06 / T08 invalid return
+  Actual: NoSuchElementException: Active loan not found: missing
+  Expected type matched; all six collection snapshots unchanged: true
+Exception captures: 6 verified; all collection snapshots unchanged after rejection.
+
+Reproduction (from BookBridge_TSA3, after sh build.sh):
+Save the following source as /tmp/BookBridgeExceptionEvidence.java, then run:
+mkdir -p /tmp/bookbridge-exception-classes
+javac --release 17 -Xlint:all -Werror -cp build/classes -d /tmp/bookbridge-exception-classes /tmp/BookBridgeExceptionEvidence.java
+java -cp build/classes:/tmp/bookbridge-exception-classes BookBridgeExceptionEvidence
+
+Source used for the captures:
+import bookbridge.exception.DuplicateEntityException;
+import bookbridge.exception.ItemUnavailableException;
+import bookbridge.exception.LoanLimitExceededException;
+import bookbridge.model.FacultyMember;
+import bookbridge.model.LibraryBook;
+import bookbridge.model.StudentMember;
+import bookbridge.service.LibraryService;
+import java.time.Clock;
+import java.time.Instant;
+import java.time.ZoneOffset;
+import java.util.List;
+import java.util.NoSuchElementException;
+
+/** Supplementary evidence capture; the submitted 33-test suite is unchanged. */
+public final class BookBridgeExceptionEvidence {
+    private BookBridgeExceptionEvidence() { }
+    public static void main(String[] args) {
+        LibraryService service = new LibraryService(
+                Clock.fixed(Instant.parse("2026-11-11T00:00:00Z"), ZoneOffset.UTC));
+        service.registerMember(new StudentMember("S", "Student"));
+        service.registerMember(new FacultyMember("F", "Faculty"));
+        service.addBook(new LibraryBook("A", "Java Collections"));
+        service.addBook(new LibraryBook("B", "Library Systems"));
+        capture("E01 / T02 duplicate member", DuplicateEntityException.class,
+                () -> service.registerMember(new StudentMember("S", "Duplicate")), service);
+        capture("E02 / T02 duplicate ISBN", DuplicateEntityException.class,
+                () -> service.addBook(new LibraryBook("A", "Duplicate")), service);
+        capture("E03 / T05 duration limit", LoanLimitExceededException.class,
+                () -> service.issueLoan("S", "B", 15), service);
+        service.issueLoan("S", "A", 1);
+        capture("E04 / T04 unavailable book", ItemUnavailableException.class,
+                () -> service.issueLoan("F", "A", 2), service);
+        service.reserveBook("F", "A", 2);
+        capture("E05 / T16 duplicate reservation", DuplicateEntityException.class,
+                () -> service.reserveBook("F", "A", 2), service);
+        capture("E06 / T08 invalid return", NoSuchElementException.class,
+                () -> service.returnBook("missing"), service);
+        System.out.println("Exception captures: 6 verified; all collection snapshots unchanged after rejection.");
+    }
+    private static List<?> snapshot(LibraryService service) {
+        return List.of(service.listMembers(), service.listBooks(), service.listActiveLoans(),
+                service.listLoanHistory(), service.listPendingReservations(), service.getCheckedOutISBNs());
+    }
+    private static void capture(String label, Class<? extends RuntimeException> expected,
+                                Runnable action, LibraryService service) {
+        List<?> before = snapshot(service);
+        try {
+            action.run();
+        } catch (RuntimeException actual) {
+            if (!expected.isInstance(actual) || !before.equals(snapshot(service))) {
+                throw new AssertionError("Wrong exception or changed collection state", actual);
+            }
+            System.out.println(label);
+            System.out.println("  Actual: " + actual.getClass().getSimpleName() + ": " + actual.getMessage());
+            System.out.println("  Expected type matched; all six collection snapshots unchanged: true");
+            return;
+        }
+        throw new AssertionError("Expected rejection: " + label);
+    }
+}

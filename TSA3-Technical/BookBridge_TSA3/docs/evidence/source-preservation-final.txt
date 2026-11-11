@@ -1,0 +1,12 @@
+TSA1-Technical/BookBridge_TSA1/BookBridgeApp.java: OK
+TSA2-Technical/BookBridge_TSA2/BookBridgeApp.java: OK
+TSA2-Technical/BookBridge_TSA2/FacultyMember.java: OK
+TSA2-Technical/BookBridge_TSA2/GuestMember.java: OK
+TSA2-Technical/BookBridge_TSA2/LibraryBook.java: OK
+TSA2-Technical/BookBridge_TSA2/LibraryService.java: OK
+TSA2-Technical/BookBridge_TSA2/LoanRecord.java: OK
+TSA2-Technical/BookBridge_TSA2/Member.java: OK
+TSA2-Technical/BookBridge_TSA2/Notifiable.java: OK
+TSA2-Technical/BookBridge_TSA2/PolymorphismTest.java: OK
+TSA2-Technical/BookBridge_TSA2/Reservation.java: OK
+TSA2-Technical/BookBridge_TSA2/StudentMember.java: OK

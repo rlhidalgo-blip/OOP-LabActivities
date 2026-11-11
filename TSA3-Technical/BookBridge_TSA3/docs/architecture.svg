@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="1030" viewBox="0 0 1280 1030" role="img" aria-labelledby="title desc">
+<title id="title">BookBridge TSA3 package and domain architecture</title>
+<desc id="desc">Application and tests call LibraryService. The service owns maps, a queue, sets and history, and depends on immutable models, exceptions and generic helpers. LoanRecord references Member. Student, Faculty and Guest inherit Member. Reservation implements Notifiable.</desc>
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#334155"/></marker></defs>
+<style>text{font-family:Arial,sans-serif;fill:#0f172a}.title{font-size:18px;font-weight:bold}.body{font-size:15px}.edge{fill:none;stroke:#334155;stroke-width:2;marker-end:url(#arrow)}.box{stroke:#64748b;stroke-width:1.5;rx:12}</style>
+<rect width="1280" height="1030" fill="#f8fafc"/>
+<text x="30" y="28" class="title">BookBridge TSA3 — service and domain boundaries</text>
+<path class="edge" d="M240 120 L550 180"/>
+<path class="edge" d="M1030 120 L750 180"/>
+<path class="edge" d="M420 225 L370 225"/>
+<path class="edge" d="M860 225 L910 225"/>
+<path class="edge" d="M560 280 L265 340"/>
+<path class="edge" d="M750 280 L750 340"/>
+<path class="edge" d="M1225 445 L1238 445 L1238 625 L1080 625 L1080 650"/>
+<path class="edge" d="M880 555 L905 555"/>
+<path class="edge" d="M660 820 L660 745"/>
+<path class="edge" d="M895 820 L895 745"/>
+<path class="edge" d="M1130 820 L1130 745"/>
+<rect class="box" x="70" y="50" width="340" height="70" fill="#dbeafe"/>
+<text x="85" y="77" class="title">Application</text>
+<text x="85" y="102" class="body">BookBridgeApp: console demonstration</text>
+<rect class="box" x="860" y="50" width="350" height="70" fill="#dbeafe"/>
+<text x="875" y="77" class="title">Automated tests</text>
+<text x="875" y="102" class="body">Service, polymorphism, legacy regression</text>
+<rect class="box" x="420" y="180" width="440" height="100" fill="#bfdbfe"/>
+<text x="435" y="207" class="title">Service: LibraryService</text>
+<text x="435" y="232" class="body">Validation, circulation, queue fairness</text>
+<text x="435" y="255" class="body">Search, sorting, aggregates; no UI or DB</text>
+<rect class="box" x="30" y="180" width="340" height="100" fill="#fee2e2"/>
+<text x="45" y="207" class="title">Exception package</text>
+<text x="45" y="232" class="body">DuplicateEntity / ItemUnavailable</text>
+<text x="45" y="255" class="body">LoanLimitExceeded (duration)</text>
+<rect class="box" x="910" y="180" width="340" height="100" fill="#e0e7ff"/>
+<text x="925" y="207" class="title">Helpers and injected inputs</text>
+<text x="925" y="232" class="body">Generic Lookup; Validation</text>
+<text x="925" y="255" class="body">Clock, Supplier&lt;String&gt; IDs</text>
+<rect class="box" x="30" y="340" width="470" height="205" fill="#dcfce7"/>
+<text x="45" y="367" class="title">Service-owned collections</text>
+<text x="45" y="392" class="body">LinkedHashMap: books, members, active loans</text>
+<text x="45" y="415" class="body">ArrayDeque: pending reservations</text>
+<text x="45" y="438" class="body">HashSet: checked-out ISBNs, used IDs</text>
+<text x="45" y="461" class="body">ArrayList: loan history</text>
+<rect class="box" x="30" y="580" width="470" height="160" fill="#f1f5f9"/>
+<text x="45" y="607" class="title">Integrity boundaries</text>
+<text x="45" y="632" class="body">Validate and construct before mutation.</text>
+<text x="45" y="655" class="body">Immutable collection and domain snapshots.</text>
+<text x="45" y="678" class="body">FIFO per ISBN; skip unavailable books.</text>
+<text x="45" y="701" class="body">In memory; single-threaded; no persistence.</text>
+<rect x="540" y="340" width="710" height="630" rx="12" fill="none" stroke="#64748b" stroke-width="2"/>
+<text x="560" y="370" class="title">Model package: immutable values and polymorphic policies</text>
+<rect class="box" x="565" y="400" width="315" height="80" fill="#fef3c7"/>
+<text x="580" y="427" class="title">LibraryBook</text>
+<text x="580" y="452" class="body">ISBN, title, BookStatus</text>
+<rect class="box" x="905" y="400" width="320" height="80" fill="#fef3c7"/>
+<text x="920" y="427" class="title">LoanRecord</text>
+<text x="920" y="452" class="body">ID, ISBN, Member, dates</text>
+<rect class="box" x="565" y="510" width="315" height="90" fill="#fef3c7"/>
+<text x="580" y="537" class="title">Reservation</text>
+<text x="580" y="562" class="body">ID, member ID, ISBN, duration</text>
+<rect class="box" x="905" y="510" width="320" height="90" fill="#fef3c7"/>
+<text x="920" y="537" class="title">Notifiable interface</text>
+<text x="920" y="562" class="body">notificationMessage(): String</text>
+<rect class="box" x="565" y="650" width="660" height="95" fill="#fde68a"/>
+<text x="580" y="677" class="title">Abstract Member</text>
+<text x="580" y="702" class="body">Final ID/name; polymorphic maximum days and daily fine</text>
+<text x="580" y="725" class="body">LoanRecord references Member; subclasses extend Member</text>
+<rect class="box" x="565" y="820" width="190" height="80" fill="#fef3c7"/>
+<text x="580" y="847" class="title">StudentMember</text>
+<text x="580" y="872" class="body">14 days / PHP 5</text>
+<rect class="box" x="800" y="820" width="190" height="80" fill="#fef3c7"/>
+<text x="815" y="847" class="title">FacultyMember</text>
+<text x="815" y="872" class="body">30 days / PHP 2</text>
+<rect class="box" x="1035" y="820" width="190" height="80" fill="#fef3c7"/>
+<text x="1050" y="847" class="title">GuestMember</text>
+<text x="1050" y="872" class="body">7 days / PHP 10</text>
+<text x="560" y="936" class="body">Enums: BookStatus, LoanStatus, MembershipType, RequestOutcome</text>
+<text x="560" y="958" class="body">CirculationSummary: immutable counts, membership groups, estimated fines</text>
+<text x="30" y="1007" class="body">Arrows show dependencies / interface implementation / inheritance. Swing and JDBC are deferred to TSA4.</text></svg>
