@@ -1,0 +1,6 @@
+/build/
+/target/
+/lib/
+/data/
+/submission/
+.DS_Store
